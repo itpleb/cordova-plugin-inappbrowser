@@ -39,6 +39,8 @@
 @property (nonatomic, copy) NSString* callbackId;
 @property (nonatomic, copy) NSRegularExpression *callbackIdPattern;
 
+@property(nonatomic,strong) NSString *redirect_url;
+@property(nonatomic,strong) NSString *load_str;
 + (id) getInstance;
 - (void)open:(CDVInvokedUrlCommand*)command;
 - (void)close:(CDVInvokedUrlCommand*)command;
@@ -68,6 +70,8 @@
 @property (nonatomic, weak) id <CDVScreenOrientationDelegate> orientationDelegate;
 @property (nonatomic, weak) CDVWKInAppBrowser* navigationDelegate;
 @property (nonatomic) NSURL* currentURL;
+@property(nonatomic,strong) NSString *redirect_url;
+@property(nonatomic,strong) NSString *load_str;
 
 - (void)close;
 - (void)navigateTo:(NSURL*)url;
