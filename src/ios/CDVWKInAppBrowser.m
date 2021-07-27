@@ -497,6 +497,8 @@ static CDVWKInAppBrowser* instance = nil;
  * to the InAppBrowser plugin. Care has been taken that other callbacks cannot be triggered, and that no
  * other code execution is possible.
  */
+#define XDX_URL_TIMEOUT 30
+static const NSString *CompanyFirstDomainByWeChatRegister = @"mis.btel.com.cn";
 - (void)webView:(WKWebView *)theWebView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     
     NSURL* url = navigationAction.request.URL;
@@ -506,6 +508,39 @@ static CDVWKInAppBrowser* instance = nil;
     BOOL useBeforeLoad = NO;
     NSString* httpMethod = navigationAction.request.HTTPMethod;
     NSString* errorMessage = nil;
+    
+    NSURLRequest *request        = navigationAction.request;
+    NSString     *scheme         = [request.URL scheme];
+    // decode for all URL to avoid url contains some special character so that it wasn't load.
+    NSString     *absoluteString = [navigationAction.request.URL.absoluteString stringByRemovingPercentEncoding];
+    NSLog(@"Current URL is %@",absoluteString);
+    static NSString *endPayRedirectURL = nil;
+    
+    //解决微信支付后为返回当前应用的问题
+     // Wechat Pay, Note : modify redirect_url to resolve we couldn't return our app from wechat client.
+     if ([absoluteString hasPrefix:@"https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb"] && ![absoluteString hasSuffix:[NSString stringWithFormat:@"redirect_url=%@://",CompanyFirstDomainByWeChatRegister]]) {
+         decisionHandler(WKNavigationActionPolicyCancel);
+         
+         // 1. If the url contain "redirect_url" : We need to remember it to use our scheme replace it.
+         // 2. If the url not contain "redirect_url" , We should add it so that we will could jump to our app.
+         //  Note : 2. if the redirect_url is not last string, you should use correct strategy, because the redirect_url's value may contain some "&" special character so that my cut method may be incorrect.
+         NSString *redirectUrl = nil;
+         if ([absoluteString containsString:@"redirect_url="]) {
+             NSRange redirectRange = [absoluteString rangeOfString:@"redirect_url"];
+             endPayRedirectURL =  [absoluteString substringFromIndex:redirectRange.location+redirectRange.length+1];
+             redirectUrl = [[absoluteString substringToIndex:redirectRange.location] stringByAppendingString:[NSString stringWithFormat:@"redirect_url=%@://",CompanyFirstDomainByWeChatRegister]];
+         }else {
+             redirectUrl = [absoluteString stringByAppendingString:[NSString stringWithFormat:@"&redirect_url=%@://",CompanyFirstDomainByWeChatRegister]];
+         }
+         
+         NSMutableURLRequest *newRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:redirectUrl] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:XDX_URL_TIMEOUT];
+         newRequest.allHTTPHeaderFields = request.allHTTPHeaderFields;
+         [newRequest setValue:[NSString stringWithFormat:@"%@",CompanyFirstDomainByWeChatRegister] forHTTPHeaderField:@"Referer"];
+         newRequest.URL = [NSURL URLWithString:redirectUrl];
+         [theWebView loadRequest:newRequest];
+         return;
+     }
+    
     
     if([_beforeload isEqualToString:@"post"]){
         //TODO handle POST requests by preserving POST data then remove this condition
@@ -1196,6 +1231,58 @@ BOOL isExiting = FALSE;
     NSURL *url = navigationAction.request.URL;
     NSURL *mainDocumentURL = navigationAction.request.mainDocumentURL;
     
+       // 拦截的url字符串
+       NSString *urlString = navigationAction.request.URL.absoluteString;
+       urlString = [urlString stringByRemovingPercentEncoding];
+       NSString *url6=urlString;
+       //NSString *url = navigationAction.request.URL.absoluteString;
+        if ([urlString containsString:@"weixin://wap/pay"]) {
+            self.load_str = @"NO";
+            NSLog(@"-00--%@---%@",navigationAction.request.URL,navigationAction.request.allHTTPHeaderFields);
+            //第二步到这 吊起微信支付
+            [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;;
+        }
+        else if ([url6 containsString:@"https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?"] && self.load_str!=@"YES") {
+            //发起微信支付后先到这里 我们要做的是设置Referer这个参数,解决回调到safari 浏览器，而不是APP 问题。。（借助URL Scheme 唤起APP 相关知识）
+            NSURLRequest *request = navigationAction.request;
+            NSMutableURLRequest *newRequest = [[NSMutableURLRequest alloc] init];
+            
+            
+         NSString *_referer=[[self getParameter:@"referer" urlStr:[navigationAction.request.URL absoluteString]] stringByRemovingPercentEncoding];
+            
+            newRequest.allHTTPHeaderFields = request.allHTTPHeaderFields;
+            [newRequest setValue:_referer forHTTPHeaderField: @"Referer"];
+            //这里记住redirect_url的值，回调APP的时候用通知重新加载redirect_url，要不然会白屏（什么也不加载）
+            //if (!self.redirect_url.length) {
+            //    self.redirect_url = [[self getParameter:@"redirect_url" //urlStr:[request.URL absoluteString]] BJCF_urlDecodedString];
+            //}
+            self.redirect_url=[[self getParameter:@"redirect_url" urlStr:[navigationAction.request.URL absoluteString]] stringByRemovingPercentEncoding];
+            //NSString *requestUrl = [self deleteParameter:@"redirect_url" WithOriginUrl:[request.URL absoluteString]];
+            //这个地址加了redirect_url这个回调的网址，会回调浏览器，修改redirect_url的值，这里redirect_url要传的值, 就是上面Referer的值，这样就会回调APP了
+          //[NSString stringWithFormat:@"%@&redirect_url=XXX://", requestUrl];
+            NSString *urlStr = [self deleteParameter:@"referer" WithOriginUrl:[navigationAction.request.URL absoluteString]];
+                 
+            newRequest.URL = [NSURL URLWithString:urlStr];
+            [theWebView loadRequest:newRequest];
+            self.load_str = @"YES";
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;
+        }
+        else  if ([url6 containsString:@"https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?"]) {
+            decisionHandler(WKNavigationActionPolicyAllow);
+            return;
+        }
+        else  if ([urlString containsString:@"weixin://wap/pay"] ) {
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;
+        }
+        else  if (self.load_str == @"YES" &&   [url6 containsString:self.redirect_url]) {
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;
+        }
+    
     BOOL isTopLevelNavigation = [url isEqual:mainDocumentURL];
     
     if (isTopLevelNavigation) {
@@ -1204,7 +1291,43 @@ BOOL isExiting = FALSE;
     
     [self.navigationDelegate webView:theWebView decidePolicyForNavigationAction:navigationAction decisionHandler:decisionHandler];
 }
+//获取URL中的某个参数：
+- (NSString *)getParameter:(NSString *)parameter urlStr:(NSString *)url {
+    NSError *error;
+    if (!url) {
+        return @"";
+    }
+    NSString *regTags = [[NSString alloc] initWithFormat:@"(^|&|\\?)+%@=+([^&]*)(&|$)",parameter];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regTags options:NSRegularExpressionCaseInsensitive error:&error];
+    NSArray *matches = [regex matchesInString:url options:0 range:NSMakeRange(0, [url length])];
+    for (NSTextCheckingResult *match in matches) {
+        NSString *tagValue = [url substringWithRange:[match rangeAtIndex:2]]; //分组2所对应的串
+        return tagValue;
+    }
+    return @"";
+}
 
+//删除URL中的某个参数：
+- (NSString *)deleteParameter:(NSString *)parameter WithOriginUrl:(NSString *)originUrl {
+    NSString *finalStr = [NSString string];
+    NSMutableString * mutStr = [NSMutableString stringWithString:originUrl];
+    NSArray *strArray = [mutStr componentsSeparatedByString:parameter];
+    NSMutableString *firstStr = [strArray objectAtIndex:0];
+    NSMutableString *lastStr = [strArray lastObject];
+    NSRange characterRange = [lastStr rangeOfString:@"&"];
+    if (characterRange.location != NSNotFound) {
+        NSArray *lastArray = [lastStr componentsSeparatedByString:@"&"];
+        NSMutableArray *mutArray = [NSMutableArray arrayWithArray:lastArray];
+        [mutArray removeObjectAtIndex:0];
+        NSString *modifiedStr = [mutArray componentsJoinedByString:@"&"];
+        finalStr = [[strArray objectAtIndex:0]stringByAppendingString:modifiedStr];
+    }
+    else {
+        //以'?'、'&'结尾
+        finalStr = [firstStr substringToIndex:[firstStr length] - 1];
+    }
+    return finalStr;
+}
 - (void)webView:(WKWebView *)theWebView didFinishNavigation:(WKNavigation *)navigation
 {
     // update url, stop spinner, update back/forward
