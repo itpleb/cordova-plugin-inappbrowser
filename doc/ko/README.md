@@ -17,9 +17,9 @@
 #         under the License.
 -->
 
-# cordova-plugin-inappbrowser4wechat
+# cordova-plugin-inappbrowser4wx
 
-[![Build Status](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wechat.svg)](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wechat)
+[![Build Status](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wx.svg)](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wx)
 
 이 플러그인 `코르도바를 호출할 때 표시 하는 웹 브라우저 보기를 제공 합니다.InAppBrowser.open()`.
 
@@ -50,7 +50,7 @@ InAppBrowser 창 표준 웹 브라우저 처럼 동작 및 코르도바 Api에 �
 
 ## 설치
 
-    cordova plugin add cordova-plugin-inappbrowser4wechat
+    cordova plugin add cordova-plugin-inappbrowser4wx
     
 
 InAppBrowser를 통해가 서 당신의 애플 리 케이 션에서 모든 페이지를 로드 하려는 경우 초기화 하는 동안 `window.open` 간단 하 게 연결할 수 있습니다. 예를 들어:

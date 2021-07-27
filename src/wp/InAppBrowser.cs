@@ -174,14 +174,14 @@ namespace WPCordovaClassLib.Cordova.Commands
 
         public void injectScriptFile(string options)
         {
-            Debug.WriteLine("Error : Windows Phone cordova-plugin-inappbrowser4wechat does not currently support executeScript");
+            Debug.WriteLine("Error : Windows Phone cordova-plugin-inappbrowser4wx does not currently support executeScript");
             string[] args = JSON.JsonHelper.Deserialize<string[]>(options);
             // throw new NotImplementedException("Windows Phone does not currently support 'executeScript'");
         }
 
         public void injectStyleCode(string options)
         {
-            Debug.WriteLine("Error : Windows Phone cordova-plugin-inappbrowser4wechat does not currently support insertCSS");
+            Debug.WriteLine("Error : Windows Phone cordova-plugin-inappbrowser4wx does not currently support insertCSS");
             return;
 
             //string[] args = JSON.JsonHelper.Deserialize<string[]>(options);
@@ -214,7 +214,7 @@ namespace WPCordovaClassLib.Cordova.Commands
 
         public void injectStyleFile(string options)
         {
-            Debug.WriteLine("Error : Windows Phone cordova-plugin-inappbrowser4wechat does not currently support insertCSS");
+            Debug.WriteLine("Error : Windows Phone cordova-plugin-inappbrowser4wx does not currently support insertCSS");
             return;
 
             //string[] args = JSON.JsonHelper.Deserialize<string[]>(options);

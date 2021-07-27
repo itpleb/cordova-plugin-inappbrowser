@@ -17,7 +17,7 @@
     under the License.
 -->
 
-# cordova-plugin-inappbrowser4wechat
+# cordova-plugin-inappbrowser4wx
 
 Dieses Plugin bietet eine Web-Browser-Ansicht, die beim Aufruf von `cordova.InAppBrowser.open()`.
 
@@ -48,7 +48,7 @@ Für rückwärts Kompatibilität, dieses Plugin auch `window.open` Haken. Jedoch
 
 ## Installation
 
-    cordova plugin add cordova-plugin-inappbrowser4wechat
+    cordova plugin add cordova-plugin-inappbrowser4wx
     
 
 Wenn Sie alle Seite Lasten in Ihrer Anwendung durch die InAppBrowser gehen möchten, können Sie einfach `window.open` während der Initialisierung Haken. Zum Beispiel:

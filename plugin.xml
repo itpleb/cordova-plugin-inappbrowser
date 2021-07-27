@@ -19,15 +19,15 @@
 -->
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-           id="cordova-plugin-inappbrowser4wechat"
+           id="cordova-plugin-inappbrowser4wx"
       version="4.1.0">
 
     <name>InAppBrowser</name>
     <description>Cordova InAppBrowser Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,in,app,browser,inappbrowser</keywords>
-    <repo>https://github.com/apache/cordova-plugin-inappbrowser4wechat</repo>
-    <issue>https://github.com/apache/cordova-plugin-inappbrowser4wechat/issues</issue>
+    <repo>https://github.com/apache/cordova-plugin-inappbrowser4wx</repo>
+    <issue>https://github.com/apache/cordova-plugin-inappbrowser4wx/issues</issue>
 
     <engines>
       <engine name="cordova" version=">=3.1.0" /><!-- Needs cordova/urlutil -->

@@ -17,7 +17,7 @@
     under the License.
 -->
 
-# cordova-plugin-inappbrowser4wechat
+# cordova-plugin-inappbrowser4wx
 
 Plugin daje widok przeglądarki sieci web, które są wyświetlane podczas wywoływania `cordova.InAppBrowser.open()`.
 
@@ -48,7 +48,7 @@ Chociaż `window.open` w globalnym zasięgu, InAppBrowser nie jest dostępne dop
 
 ## Instalacja
 
-    cordova plugin add cordova-plugin-inappbrowser4wechat
+    cordova plugin add cordova-plugin-inappbrowser4wx
     
 
 Jeśli chcesz wszystko stronica ładunki w swojej aplikacji, aby przejść przez InAppBrowser, można po prostu podłączyć `window.open` podczas inicjowania. Na przykład:

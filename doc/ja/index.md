@@ -17,7 +17,7 @@
     under the License.
 -->
 
-# cordova-plugin-inappbrowser4wechat
+# cordova-plugin-inappbrowser4wx
 
 このプラグインは `コルドバを呼び出すときに表示される web ブラウザーのビューを提供します。InAppBrowser.open()`.
 
@@ -48,7 +48,7 @@ InAppBrowser を提供しますデフォルトで GUI コントロール (戻る
 
 ## インストール
 
-    cordova plugin add cordova-plugin-inappbrowser4wechat
+    cordova plugin add cordova-plugin-inappbrowser4wx
     
 
 InAppBrowser を通過するアプリですべてのページの読み込みをする場合は初期化中に `window.open` を単にフックできます。たとえば。

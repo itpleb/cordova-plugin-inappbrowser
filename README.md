@@ -23,9 +23,9 @@ description: Open an in-app browser window.
 
 |AppVeyor|Travis CI|
 |:-:|:-:|
-|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-inappbrowser4wechat?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-inappbrowser4wechat)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wechat.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wechat)|
+|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-inappbrowser4wx?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-inappbrowser4wx)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wx.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wx)|
 
-# cordova-plugin-inappbrowser4wechat
+# cordova-plugin-inappbrowser4wx
 
 You can show helpful articles, videos, and web resources inside of your app. Users can view web pages without leaving your app.
 
@@ -58,7 +58,7 @@ forward, done).
 
 ## Installation
 
-    cordova plugin add cordova-plugin-inappbrowser4wechat
+    cordova plugin add cordova-plugin-inappbrowser4wx
 
 If you want all page loads in your app to go through the InAppBrowser, you can
 simply hook `window.open` during initialization.  For example:
@@ -559,7 +559,7 @@ $('#help-select').on('change', function (e) {
 
         case "article":
             url = "https://cordova.apache.org/docs/en/latest/"
-                        + "reference/cordova-plugin-inappbrowser4wechat/index.html";
+                        + "reference/cordova-plugin-inappbrowser4wx/index.html";
             break;
 
         case "video":

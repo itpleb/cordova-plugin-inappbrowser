@@ -1,10 +1,10 @@
 {
   "author": "Apache Software Foundation",
   "bugs": {
-    "url": "https://github.com/apache/cordova-plugin-inappbrowser4wechat/issues"
+    "url": "https://github.com/apache/cordova-plugin-inappbrowser4wx/issues"
   },
   "cordova": {
-    "id": "cordova-plugin-inappbrowser4wechat",
+    "id": "cordova-plugin-inappbrowser4wx",
     "platforms": [
       "android",
       "browser",
@@ -32,7 +32,7 @@
       }
     }
   },
-  "homepage": "https://github.com/apache/cordova-plugin-inappbrowser4wechat#readme",
+  "homepage": "https://github.com/apache/cordova-plugin-inappbrowser4wx#readme",
   "keywords": [
     "cordova",
     "in",
@@ -47,10 +47,10 @@
     "cordova-windows"
   ],
   "license": "Apache-2.0",
-  "name": "cordova-plugin-inappbrowser4wechat",
+  "name": "cordova-plugin-inappbrowser4wx",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/apache/cordova-plugin-inappbrowser4wechat.git"
+    "url": "git+https://github.com/apache/cordova-plugin-inappbrowser4wx.git"
   },
   "scripts": {
     "lint": "eslint .",

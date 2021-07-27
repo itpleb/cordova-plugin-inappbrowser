@@ -34,8 +34,8 @@ If you are not using the Cordova Command-line Interface, follow [Using Plugman t
 ./cordova-plugin-file-transfer/README.md
 ./cordova-plugin-geolocation/README.md
 ./cordova-plugin-globalization/README.md
-./cordova-plugin-inappbrowser4wechat/README.md
-./cordova-plugin-inappbrowser4wechat/src/blackberry10/README.md
+./cordova-plugin-inappbrowser4wx/README.md
+./cordova-plugin-inappbrowser4wx/src/blackberry10/README.md
 ./cordova-plugin-media/README.md
 ./cordova-plugin-media-capture/README.md
 ./cordova-plugin-network-information/README.md

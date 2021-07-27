@@ -1,9 +1,9 @@
 {
-  "name": "cordova-plugin-inappbrowser4wechat-tests",
+  "name": "cordova-plugin-inappbrowser4wx-tests",
   "version": "1.7.1-dev",
   "description": "",
   "cordova": {
-    "id": "cordova-plugin-inappbrowser4wechat-tests",
+    "id": "cordova-plugin-inappbrowser4wx-tests",
     "platforms": []
   },
   "keywords": [

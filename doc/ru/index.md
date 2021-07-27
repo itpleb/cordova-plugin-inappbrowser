@@ -17,7 +17,7 @@
     under the License.
 -->
 
-# cordova-plugin-inappbrowser4wechat
+# cordova-plugin-inappbrowser4wx
 
 Этот плагин обеспечивает представление веб-браузера, что показывает при вызове`window.open()`.
 
@@ -28,7 +28,7 @@
 
 ## Установка
 
-    cordova plugin add cordova-plugin-inappbrowser4wechat
+    cordova plugin add cordova-plugin-inappbrowser4wx
     
 
 ## window.open

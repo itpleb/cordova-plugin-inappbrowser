@@ -17,9 +17,9 @@
 #         under the License.
 -->
 
-# cordova-plugin-inappbrowser4wechat
+# cordova-plugin-inappbrowser4wx
 
-[![Build Status](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wechat.svg)](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wechat)
+[![Build Status](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wx.svg)](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wx)
 
 Questo plugin fornisce una vista di browser web che viene visualizzato quando si chiama `di cordova.InAppBrowser.open()`.
 
@@ -50,7 +50,7 @@ Sebbene `window.open` sia in ambito globale, InAppBrowser non è disponibile fin
 
 ## Installazione
 
-    cordova plugin add cordova-plugin-inappbrowser4wechat
+    cordova plugin add cordova-plugin-inappbrowser4wx
     
 
 Se si desidera che tutti i carichi di pagina nell'app di passare attraverso il InAppBrowser, si può semplicemente collegare `window.open` durante l'inizializzazione. Per esempio:
