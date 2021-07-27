@@ -23,9 +23,9 @@ description: Open an in-app browser window.
 
 |AppVeyor|Travis CI|
 |:-:|:-:|
-|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-inappbrowser?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-inappbrowser)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-inappbrowser.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-inappbrowser)|
+|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-inappbrowser4wechat?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-inappbrowser4wechat)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wechat.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-inappbrowser4wechat)|
 
-# cordova-plugin-inappbrowser
+# cordova-plugin-inappbrowser4wechat
 
 You can show helpful articles, videos, and web resources inside of your app. Users can view web pages without leaving your app.
 
@@ -58,7 +58,7 @@ forward, done).
 
 ## Installation
 
-    cordova plugin add cordova-plugin-inappbrowser
+    cordova plugin add cordova-plugin-inappbrowser4wechat
 
 If you want all page loads in your app to go through the InAppBrowser, you can
 simply hook `window.open` during initialization.  For example:
@@ -71,7 +71,7 @@ simply hook `window.open` during initialization.  For example:
 ### Preferences
 
 #### <b>config.xml</b>
-- <b>InAppBrowserStatusBarStyle [iOS only]</b>: (string, options 'lightcontent', 'darkcontent' or 'default'. Defaults to 'default') set text color style for iOS. 'lightcontent' is intended for use on dark backgrounds. 'darkcontent' is only available since iOS 13 and intended for use on light backgrounds.
+- <b>InAppBrowserStatusBarStyle [iOS only]</b>: (string, options 'lightcontent' or 'default'. Defaults to 'default') set text color style for iOS.
 ```
 <preference name="InAppBrowserStatusBarStyle" value="lightcontent" />
 ```
@@ -559,7 +559,7 @@ $('#help-select').on('change', function (e) {
 
         case "article":
             url = "https://cordova.apache.org/docs/en/latest/"
-                        + "reference/cordova-plugin-inappbrowser/index.html";
+                        + "reference/cordova-plugin-inappbrowser4wechat/index.html";
             break;
 
         case "video":

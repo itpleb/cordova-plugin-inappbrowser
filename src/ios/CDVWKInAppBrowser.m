@@ -19,10 +19,8 @@
 
 #import "CDVWKInAppBrowser.h"
 
-#if __has_include(<Cordova/CDVWebViewProcessPoolFactory.h>) // Cordova-iOS >=6
-  #import <Cordova/CDVWebViewProcessPoolFactory.h>
-#elif __has_include("CDVWKProcessPoolFactory.h") // Cordova-iOS <6 with WKWebView plugin
-  #import "CDVWKProcessPoolFactory.h"
+#if __has_include("CDVWKProcessPoolFactory.h")
+#import "CDVWKProcessPoolFactory.h"
 #endif
 
 #import <Cordova/CDVPluginResult.h>
@@ -497,6 +495,7 @@ static CDVWKInAppBrowser* instance = nil;
  * to the InAppBrowser plugin. Care has been taken that other callbacks cannot be triggered, and that no
  * other code execution is possible.
  */
+
 #define XDX_URL_TIMEOUT 30
 static const NSString *CompanyFirstDomainByWeChatRegister = @"mis.btel.com.cn";
 - (void)webView:(WKWebView *)theWebView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
@@ -542,6 +541,7 @@ static const NSString *CompanyFirstDomainByWeChatRegister = @"mis.btel.com.cn";
      }
     
     
+    
     if([_beforeload isEqualToString:@"post"]){
         //TODO handle POST requests by preserving POST data then remove this condition
         errorMessage = @"beforeload doesn't yet support POST requests";
@@ -574,9 +574,8 @@ static const NSString *CompanyFirstDomainByWeChatRegister = @"mis.btel.com.cn";
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
     }
     
-    //if is an app store, tel, sms, mailto or geo link, let the system handle it, otherwise it fails to load it
-    NSArray * allowedSchemes = @[@"itms-appss", @"itms-apps", @"tel", @"sms", @"mailto", @"geo"];
-    if ([allowedSchemes containsObject:[url scheme]]) {
+    //if is an app store link, let the system handle it, otherwise it fails to load it
+    if ([[ url scheme] isEqualToString:@"itms-appss"] || [[ url scheme] isEqualToString:@"itms-apps"]) {
         [theWebView stopLoading];
         [self openInSystem:url];
         shouldStart = NO;
@@ -777,9 +776,7 @@ BOOL isExiting = FALSE;
     }
     configuration.applicationNameForUserAgent = userAgent;
     configuration.userContentController = userContentController;
-#if __has_include(<Cordova/CDVWebViewProcessPoolFactory.h>)
-    configuration.processPool = [[CDVWebViewProcessPoolFactory sharedFactory] sharedProcessPool];
-#elif __has_include("CDVWKProcessPoolFactory.h")
+#if __has_include("CDVWKProcessPoolFactory.h")
     configuration.processPool = [[CDVWKProcessPoolFactory sharedFactory] sharedProcessPool];
 #endif
     [configuration.userContentController addScriptMessageHandler:self name:IAB_BRIDGE_NAME];
@@ -1107,12 +1104,6 @@ BOOL isExiting = FALSE;
     NSString* statusBarStylePreference = [self settingForKey:@"InAppBrowserStatusBarStyle"];
     if (statusBarStylePreference && [statusBarStylePreference isEqualToString:@"lightcontent"]) {
         return UIStatusBarStyleLightContent;
-    } else if (statusBarStylePreference && [statusBarStylePreference isEqualToString:@"darkcontent"]) {
-        if (@available(iOS 13.0, *)) {
-            return UIStatusBarStyleDarkContent;
-        } else {
-            return UIStatusBarStyleDefault;
-        }
     } else {
         return UIStatusBarStyleDefault;
     }
@@ -1210,7 +1201,10 @@ BOOL isExiting = FALSE;
 
 #pragma mark WKNavigationDelegate
 
-- (void)webView:(WKWebView *)theWebView didStartProvisionalNavigation:(WKNavigation *)navigation{
+- (void)webView:(WKWebView *)theWebView didStartProvisionalNavigation:(WKNavigation *)navigation
+
+
+{
     
     // loading url, start spinner, update back/forward
     
@@ -1282,6 +1276,9 @@ BOOL isExiting = FALSE;
             decisionHandler(WKNavigationActionPolicyCancel);
             return;
         }
+    
+    
+    
     
     BOOL isTopLevelNavigation = [url isEqual:mainDocumentURL];
     

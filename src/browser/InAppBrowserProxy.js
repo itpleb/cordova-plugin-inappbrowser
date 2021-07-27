@@ -216,7 +216,7 @@ var IAB = {
     },
 
     injectScriptFile: function (win, fail, args) {
-        var msg = 'Browser cordova-plugin-inappbrowser injectScriptFile is not yet implemented';
+        var msg = 'Browser cordova-plugin-inappbrowser4wechat injectScriptFile is not yet implemented';
         console.warn(msg);
         if (fail) {
             fail(msg);
@@ -224,7 +224,7 @@ var IAB = {
     },
 
     injectStyleCode: function (win, fail, args) {
-        var msg = 'Browser cordova-plugin-inappbrowser injectStyleCode is not yet implemented';
+        var msg = 'Browser cordova-plugin-inappbrowser4wechat injectStyleCode is not yet implemented';
         console.warn(msg);
         if (fail) {
             fail(msg);
@@ -232,7 +232,7 @@ var IAB = {
     },
 
     injectStyleFile: function (win, fail, args) {
-        var msg = 'Browser cordova-plugin-inappbrowser injectStyleFile is not yet implemented';
+        var msg = 'Browser cordova-plugin-inappbrowser4wechat injectStyleFile is not yet implemented';
         console.warn(msg);
         if (fail) {
             fail(msg);

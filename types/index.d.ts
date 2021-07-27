@@ -1,5 +1,5 @@
 // Type definitions for Apache Cordova InAppBrowser plugin
-// Project: https://github.com/apache/cordova-plugin-inappbrowser
+// Project: https://github.com/apache/cordova-plugin-inappbrowser4wechat
 // Definitions by: Microsoft Open Technologies Inc <http://msopentech.com>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 //

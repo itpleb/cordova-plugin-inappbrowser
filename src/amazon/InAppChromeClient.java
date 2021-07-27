@@ -24,18 +24,14 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import android.annotation.TargetApi;
-import android.os.Build;
-import android.os.Message;
-import android.webkit.JsPromptResult;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebStorage;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.webkit.GeolocationPermissions.Callback;
+import com.amazon.android.webkit.AmazonWebChromeClient;
+import com.amazon.android.webkit.AmazonGeolocationPermissions.Callback;
+import com.amazon.android.webkit.AmazonJsPromptResult;
+import com.amazon.android.webkit.AmazonWebStorage;
+import com.amazon.android.webkit.AmazonWebView;
+import com.amazon.android.webkit.AmazonWebViewClient;
 
-public class InAppChromeClient extends WebChromeClient {
+public class InAppChromeClient extends AmazonWebChromeClient {
 
     private CordovaWebView webView;
     private String LOG_TAG = "InAppChromeClient";
@@ -57,10 +53,23 @@ public class InAppChromeClient extends WebChromeClient {
      */
     @Override
     public void onExceededDatabaseQuota(String url, String databaseIdentifier, long currentQuota, long estimatedSize,
-            long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater)
+            long totalUsedQuota, AmazonWebStorage.QuotaUpdater quotaUpdater)
     {
         LOG.d(LOG_TAG, "onExceededDatabaseQuota estimatedSize: %d  currentQuota: %d  totalUsedQuota: %d", estimatedSize, currentQuota, totalUsedQuota);
-        quotaUpdater.updateQuota(MAX_QUOTA);
+
+        if (estimatedSize < MAX_QUOTA)
+        {
+            //increase for 1Mb
+            long newQuota = estimatedSize;
+            LOG.d(LOG_TAG, "calling quotaUpdater.updateQuota newQuota: %d", newQuota);
+            quotaUpdater.updateQuota(newQuota);
+        }
+        else
+        {
+            // Set the quota to whatever it is and force an error
+            // TODO: get docs on how to handle this properly
+            quotaUpdater.updateQuota(currentQuota);
+        }
     }
 
     /**
@@ -102,13 +111,13 @@ public class InAppChromeClient extends WebChromeClient {
      * @param result
      */
     @Override
-    public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+    public boolean onJsPrompt(AmazonWebView view, String url, String message, String defaultValue, AmazonJsPromptResult result) {
         // See if the prompt string uses the 'gap-iab' protocol. If so, the remainder should be the id of a callback to execute.
         if (defaultValue != null && defaultValue.startsWith("gap")) {
             if(defaultValue.startsWith("gap-iab://")) {
                 PluginResult scriptResult;
                 String scriptCallbackId = defaultValue.substring(10);
-                if (scriptCallbackId.matches("^InAppBrowser[0-9]{1,10}$")) {
+                if (scriptCallbackId.startsWith("InAppBrowser")) {
                     if(message == null || message.length() == 0) {
                         scriptResult = new PluginResult(PluginResult.Status.OK, new JSONArray());
                     } else {
@@ -122,14 +131,9 @@ public class InAppChromeClient extends WebChromeClient {
                     result.confirm("");
                     return true;
                 }
-                else {
-                    // Anything else that doesn't look like InAppBrowser0123456789 should end up here
-                    LOG.w(LOG_TAG, "InAppBrowser callback called with invalid callbackId : "+ scriptCallbackId);
-                    result.cancel();
-                    return true;
-                }
             }
-            else {
+            else
+            {
                 // Anything else with a gap: prefix should get this message
                 LOG.w(LOG_TAG, "InAppBrowser does not support Cordova API calls: " + url + " " + defaultValue); 
                 result.cancel();
@@ -139,45 +143,4 @@ public class InAppChromeClient extends WebChromeClient {
         return false;
     }
 
-    /**
-     * The InAppWebBrowser WebView is configured to MultipleWindow mode to mitigate a security
-     * bug found in Chromium prior to version 83.0.4103.106.
-     * See https://bugs.chromium.org/p/chromium/issues/detail?id=1083819
-     *
-     * Valid Urls set to open in new window will be routed back to load in the original WebView.
-     *
-     * @param view
-     * @param isDialog
-     * @param isUserGesture
-     * @param resultMsg
-     * @return
-     */
-    @Override
-    public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
-        WebView inAppWebView = view;
-        final WebViewClient webViewClient =
-                new WebViewClient() {
-                    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                        inAppWebView.loadUrl(request.getUrl().toString());
-                        return true;
-                    }
-
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        inAppWebView.loadUrl(url);
-                        return true;
-                    }
-                };
-
-        final WebView newWebView = new WebView(view.getContext());
-        newWebView.setWebViewClient(webViewClient);
-
-        final WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-        transport.setWebView(newWebView);
-        resultMsg.sendToTarget();
-
-        return true;
-    }
 }
